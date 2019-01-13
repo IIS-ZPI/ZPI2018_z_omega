@@ -1,16 +1,16 @@
 import com.google.gson.Gson;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
-import com.google.gson.reflect.TypeToken;
 
 import java.io.BufferedReader;
+import java.io.FileNotFoundException;
 import java.io.InputStreamReader;
-import java.lang.reflect.Type;
+import java.lang.reflect.Array;
 import java.math.BigDecimal;
 import java.net.URL;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.*;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.Scanner;
 
 public class Main {
 
@@ -21,8 +21,7 @@ public class Main {
     Date[] date = new Date[days];
     static int days;
 
-
-    public static void downloadData()
+    public static ReturnItem downloadData()
     {
         LocalDate date1 = LocalDate.now().minusDays(days);
         LocalDate date2 = LocalDate.now();
@@ -31,6 +30,7 @@ public class Main {
         stop_date = date2.format(formatter);
         BigDecimal[] rate = new BigDecimal[days];
         Rates[] rates = new Rates[days];
+        int len = 0;
 
         try {
             URL url = new URL("http://api.nbp.pl/api/exchangerates/rates/A/" + type_currency + "/" + start_date + "/" + stop_date + "/");
@@ -40,7 +40,7 @@ public class Main {
                 cur cur = gson.fromJson(str, cur.class);
 
                 int i = 0;
-                int len = 0;
+
 
                 for (Rates length : cur.rates) {
                     len++;
@@ -50,32 +50,17 @@ public class Main {
                 {
                     rates[i] = cur.rates.get(i);
                     rate[i] = rates[i].mid;
-                    System.out.println(rate[i]);
                 }
-
-                int up = 0;
-                int down = 0;
-                int none = 0;
-                int j = 0;
-
-                for (j = 0 ; j < (i-1) ; j++)
-                {
-                    if (rate[j+1].compareTo(rate[j]) > 0){
-                        up++;
-                    }
-                    if (rate[j+1].compareTo(rate[j]) < 0){
-                        down++;
-                    }
-                    if (rate[j+1].compareTo(rate[j]) == 0){
-                        none++;
-                    }
-                }
-
-                System.out.println(up + " " + down + " " + none);
             }
         } catch (Exception ex) {
-            ex.printStackTrace();
+            System.out.println("Blad podczas pobierania danych!");
         }
+
+        ReturnItem item = new ReturnItem();
+        item.cur = rate;
+        item.len = len;
+
+        return item;
     }
 
     public static void main(String[] args) {
@@ -95,57 +80,108 @@ public class Main {
         System.out.println("6 - rok");
         days = read.nextInt();
 
+        ReturnItem item = new ReturnItem();
+
         switch (days)
         {
             case 1:
             {
                 days = 7;
-                downloadData();
+                item = downloadData();
                 break;
             }
             case 2:
             {
                 days = 14;
-                downloadData();
+                item = downloadData();
                 break;
             }
             case 3:
             {
                 days = 30;
+                item = downloadData();
                 break;
             }
             case 4:
             {
                 days = 90;
+                item = downloadData();
                 break;
             }
             case 5:
             {
                 days = 182;
+                item = downloadData();
                 break;
             }
             case 6:
             {
                 days = 365;
+                item = downloadData();
                 break;
             }
         }
 
+        int len = item.len;
+        BigDecimal[] cur = new BigDecimal[len];
+        cur = item.cur;
 
-        int i = 0;
+        int up = 0;
+        int down = 0;
+        int none = 0;
+        int j = 0;
 
-        //Type hMapType = new TypeToken<HashMap<String, List<String>>>() {}.getType();
-        //Map<String, List<String>> list = new HashMap<String, List<String>>();
-        //list = gson.fromJson(str, hMapType);
-        //Set<String> key = list.keySet();
-        //String[] tabKey = new String[10];
-        //key.toArray(tabKey);
-        //List<String> listKey = new ArrayList<>();
+        for (j = 0 ; j < len-1 ; j++)
+        {
+            if (cur[j+1].compareTo(cur[j]) > 0){
+                up++;
+            }
+            if (cur[j+1].compareTo(cur[j]) < 0){
+                down++;
+            }
+            if (cur[j+1].compareTo(cur[j]) == 0){
+                none++;
+            }
+        }
+        System.out.println("Wzrostów: " + up);
+        System.out.println("Spadkwów: " + down);
+        System.out.println("Bez zmian: " + none);
 
-        //for (int i = 0; i < tabKey.length; i++)
-        //{
-        //    listKey.add(tabKey[i]);
-        //    //System.out.println(listKey);
-        //}
+        BigDecimal[] medCur = cur;
+        BigDecimal avg = new BigDecimal(0);
+        BigDecimal med = new BigDecimal(0);
+        BigDecimal two = new BigDecimal(2);
+        BigDecimal tmp = new BigDecimal(0);
+
+        System.out.println(medCur.length);
+
+        int n = 0;
+        int m = 0;
+
+        for (n = 0 ; n < len-1 ; n++)
+        {
+            for (m = 0 ; m < len-1 ; m++)
+            {
+                if (medCur[m].compareTo(medCur[m+1]) > 0)
+                {
+                    tmp = medCur[m];
+                    medCur[m] = medCur[m+1];
+                    medCur[m+1] = tmp;
+                }
+            }
+        }
+
+        if (len % 2 == 0)
+        {
+            avg = medCur[len/2].add(medCur[(len/2)-1]);
+            med = avg.divide(two);
+        }
+        else
+        {
+            med = medCur[len/2];
+        }
+
+        System.out.println("Mediana: " + med);
+
     }
 }
