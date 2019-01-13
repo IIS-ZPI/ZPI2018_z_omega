@@ -1,6 +1,7 @@
 import com.google.gson.Gson;
 
 import java.io.BufferedReader;
+import java.io.FileNotFoundException;
 import java.io.InputStreamReader;
 import java.math.BigDecimal;
 import java.net.URL;
@@ -50,7 +51,7 @@ public class Main {
                 }
             }
         } catch (Exception ex) {
-            ex.printStackTrace();
+            System.out.println("Blad podczas pobierania danych!");
         }
 
         ReturnItem item = new ReturnItem();
