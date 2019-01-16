@@ -3,18 +3,12 @@ import com.google.gson.Gson;
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.InputStreamReader;
-<<<<<<< HEAD
-=======
 import java.lang.reflect.Array;
->>>>>>> 2---CALCULATIONS
 import java.math.BigDecimal;
 import java.net.URL;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-<<<<<<< HEAD
-=======
 import java.util.Arrays;
->>>>>>> 2---CALCULATIONS
 import java.util.Date;
 import java.util.Scanner;
 
@@ -62,19 +56,8 @@ public class Main {
             }
         } catch (Exception ex) {
             System.out.println("Blad podczas pobierania danych!");
-<<<<<<< HEAD
-        }
-
-        ReturnItem item = new ReturnItem();
-        item.cur = rate;
-        item.len = len;
-
-        return item;
-    }
-=======
             System.exit(0);
         }
->>>>>>> 2---CALCULATIONS
 
         ReturnItem item = new ReturnItem();
         item.cur = rate;
@@ -99,12 +82,6 @@ public class Main {
         days = read.nextInt();
 
         ReturnItem item = new ReturnItem();
-<<<<<<< HEAD
-        //ReturnItem item2 = new ReturnItem();
-        //ReturnItem item3 = new ReturnItem();
-        //ReturnItem item4 = new ReturnItem();
-=======
->>>>>>> 2---CALCULATIONS
 
         switch (days)
         {
@@ -197,32 +174,6 @@ public class Main {
             }
         }
 
-<<<<<<< HEAD
-        int len = item.len;
-        BigDecimal[] cur = item.cur;
-
-        int up = 0;
-        int down = 0;
-        int none = 0;
-        int j = 0;
-
-        for (j = 0 ; j < len-1 ; j++)
-        {
-            if (cur[j+1].compareTo(cur[j]) > 0){
-                up++;
-            }
-            if (cur[j+1].compareTo(cur[j]) < 0){
-                down++;
-            }
-            if (cur[j+1].compareTo(cur[j]) == 0){
-                none++;
-            }
-        }
-        System.out.println("Wzrostów: " + up);
-        System.out.println("Spadkwów: " + down);
-        System.out.println("Bez zmian: " + none);
-
-=======
         if (len % 2 == 0)
         {
             avg = medCur[len/2].add(medCur[(len/2)-1]);
@@ -268,6 +219,5 @@ public class Main {
                 System.out.println("Zly wybor!");
             }
         }
->>>>>>> 2---CALCULATIONS
     }
 }
