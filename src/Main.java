@@ -68,6 +68,8 @@ public class Main {
 
     public static void Calculations()
     {
+        int choose = 0;
+
         System.out.println("---");
         System.out.println("Podaj walute: ");
         type_currency = read.next();
@@ -79,11 +81,11 @@ public class Main {
         System.out.println("4 - 1 kwartal");
         System.out.println("5 - pol roku");
         System.out.println("6 - rok");
-        days = read.nextInt();
+        choose = read.nextInt();
 
         ReturnItem item = new ReturnItem();
 
-        switch (days)
+        switch (choose)
         {
             case 1:
             {
@@ -124,6 +126,7 @@ public class Main {
             default:
             {
                 System.out.println("Zly wybor!");
+                System.exit(0);
             }
         }
 
@@ -189,7 +192,84 @@ public class Main {
 
     public static void TwoCurrency()
     {
+        int choose = 0;
+        int i = 0;
+        String currency1 = new String();
+        String currency2 = new String();
 
+        System.out.println("---");
+        System.out.println("Podaj walute 1: ");
+        currency1 = read.next();
+        System.out.println("Podaj walute 2: ");
+        currency2 = read.next();
+
+        System.out.println("Podaj zakres: ");
+        System.out.println("1 - 1 miesiac");
+        System.out.println("2 - 1 kwartal");
+
+        choose = read.nextInt();
+
+        ReturnItem item1 = new ReturnItem();
+        ReturnItem item2 = new ReturnItem();
+
+        switch(choose)
+        {
+            case 1:
+            {
+                days = 30;
+
+                type_currency = currency1;
+                item1 = downloadData();
+
+                type_currency = currency2;
+                item2 = downloadData();
+
+                break;
+            }
+            case 2:
+            {
+                days = 90;
+
+                type_currency = currency1;
+                item1 = downloadData();
+
+                type_currency = currency2;
+                item2 = downloadData();
+
+                break;
+            }
+            default:
+            {
+                System.out.println("Zly wybor!");
+                System.exit(0);
+            }
+        }
+
+        int len1 = item1.len;
+        BigDecimal[] cur1 = new BigDecimal[len1];
+        cur1 = item1.cur;
+
+        System.out.println("---");
+        System.out.println("Dla waluty: " + currency1);
+        System.out.println("---");
+
+        for (i = 0 ; i < len1-1 ; i++)
+        {
+            System.out.println(i+1 + ". " + cur1[i].subtract(cur1[i+1]));
+        }
+
+        int len2 = item2.len;
+        BigDecimal[] cur2 = new BigDecimal[len2];
+        cur2 = item2.cur;
+
+        System.out.println("---");
+        System.out.println("Dla waluty: " + currency2);
+        System.out.println("---");
+
+        for (i = 0 ; i < len2-1 ; i++)
+        {
+            System.out.println(i+1 + ". " + cur2[i].subtract(cur2[i+1]));
+        }
     }
 
     public static void main(String[] args) {
