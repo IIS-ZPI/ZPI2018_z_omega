@@ -20,10 +20,12 @@ public class Main {
     static String stop_date = new String();
     Date[] date = new Date[days];
     static int days;
+    static Scanner read = new Scanner(System.in);
 
     public static ReturnItem downloadData()
     {
         LocalDate date1 = LocalDate.now().minusDays(days);
+        System.out.println(date1);
         LocalDate date2 = LocalDate.now();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         start_date = date1.format(formatter);
@@ -54,6 +56,7 @@ public class Main {
             }
         } catch (Exception ex) {
             System.out.println("Blad podczas pobierania danych!");
+            System.exit(0);
         }
 
         ReturnItem item = new ReturnItem();
@@ -63,13 +66,11 @@ public class Main {
         return item;
     }
 
-    public static void main(String[] args) {
-
-        Scanner read = new Scanner(System.in);
-
-        System.out.println("---WALUTY---");
+    public static void Calculations()
+    {
+        System.out.println("---");
         System.out.println("Podaj walute: ");
-        type_currency = read.nextLine();
+        type_currency = read.next();
 
         System.out.println("Podaj zakres: ");
         System.out.println("1 - 1 tydzien");
@@ -120,6 +121,10 @@ public class Main {
                 item = downloadData();
                 break;
             }
+            default:
+            {
+                System.out.println("Zly wybor!");
+            }
         }
 
         int len = item.len;
@@ -153,8 +158,6 @@ public class Main {
         BigDecimal two = new BigDecimal(2);
         BigDecimal tmp = new BigDecimal(0);
 
-        System.out.println(medCur.length);
-
         int n = 0;
         int m = 0;
 
@@ -182,6 +185,39 @@ public class Main {
         }
 
         System.out.println("Mediana: " + med);
+    }
 
+    public static void TwoCurrency()
+    {
+
+    }
+
+    public static void main(String[] args) {
+
+        int choose = 0;
+
+        System.out.println("---WALUTY---");
+
+        System.out.println("1 - Sesje i miary statystyczne");
+        System.out.println("2 - Rozklad zmian 2 walut");
+        choose = read.nextInt();
+
+        switch(choose)
+        {
+            case 1:
+            {
+                Calculations();
+                break;
+            }
+            case 2:
+            {
+                TwoCurrency();
+                break;
+            }
+            default:
+            {
+                System.out.println("Zly wybor!");
+            }
+        }
     }
 }
