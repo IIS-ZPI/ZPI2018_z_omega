@@ -1,8 +1,6 @@
 import com.google.gson.Gson;
 
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.lang.reflect.Array;
 import java.math.BigDecimal;
 import java.net.URL;
@@ -21,6 +19,7 @@ public class Main {
     Date[] date = new Date[days];
     static int days;
     static Scanner read = new Scanner(System.in);
+    static StringBuilder sb = new StringBuilder();
 
     public static ReturnItem downloadData()
     {
@@ -152,8 +151,20 @@ public class Main {
             }
         }
         System.out.println("Wzrostów: " + up);
+        sb.append("Wzrostow:");
+        sb.append(',');
+        sb.append(up);
+        sb.append('\n');
         System.out.println("Spadkwów: " + down);
+        sb.append("Spadkow:");
+        sb.append(',');
+        sb.append(down);
+        sb.append('\n');
         System.out.println("Bez zmian: " + none);
+        sb.append("Bez zmian:");
+        sb.append(',');
+        sb.append(none);
+        sb.append('\n');
 
         BigDecimal[] medCur = cur;
         BigDecimal avg = new BigDecimal(0);
@@ -188,6 +199,10 @@ public class Main {
         }
 
         System.out.println("Mediana: " + med);
+        sb.append("Mediana:");
+        sb.append(',');
+        sb.append(med);
+        sb.append('\n');
     }
 
     public static void TwoCurrency()
@@ -252,10 +267,18 @@ public class Main {
         System.out.println("---");
         System.out.println("Dla waluty: " + currency1);
         System.out.println("---");
+        sb.append("Dla waluty:");
+        sb.append(',');
+        sb.append(currency1);
+        sb.append('\n');
 
         for (i = 0 ; i < len1-1 ; i++)
         {
             System.out.println(i+1 + ". " + cur1[i].subtract(cur1[i+1]));
+            sb.append(i+1);
+            sb.append(',');
+            sb.append(cur1[i].subtract(cur1[i+1]));
+            sb.append('\n');
         }
 
         int len2 = item2.len;
@@ -265,10 +288,18 @@ public class Main {
         System.out.println("---");
         System.out.println("Dla waluty: " + currency2);
         System.out.println("---");
+        sb.append("Dla waluty:");
+        sb.append(',');
+        sb.append(currency2);
+        sb.append('\n');
 
         for (i = 0 ; i < len2-1 ; i++)
         {
             System.out.println(i+1 + ". " + cur2[i].subtract(cur2[i+1]));
+            sb.append(i+1);
+            sb.append(',');
+            sb.append(cur2[i].subtract(cur2[i+1]));
+            sb.append('\n');
         }
     }
 
@@ -298,6 +329,18 @@ public class Main {
             {
                 System.out.println("Zly wybor!");
             }
+        }
+
+        try
+        {
+            PrintWriter pw = new PrintWriter(new File("result.csv"));
+            pw.write(sb.toString());
+            pw.close();
+            System.out.println("Zapisano plik!");
+        }
+        catch (FileNotFoundException e)
+        {
+            System.out.println("Błąd zapisu pliku!");
         }
     }
 }
