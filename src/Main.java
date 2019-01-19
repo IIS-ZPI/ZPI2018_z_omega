@@ -202,7 +202,38 @@ public class Main {
         sb.append(',');
         sb.append(med);
         sb.append('\n');
+
+//Dominanta
+    BigDecimal dominanta = new BigDecimal(0);
+    int maks = 0;
+    int licznik = 0;
+
+    for(int i = 0; i<len-1; i++){
+        licznik = 0;
+        for(int k=0; k<len-1; k++){
+            if (medCur[i] == medCur[k]) {
+                licznik++;
+                if (licznik > maks) {
+                    dominanta = medCur[i];
+                    maks = licznik;
+                }
+            }
+
+        }
     }
+
+        System.out.println("Dominanta:" + dominanta);
+        sb.append("Dominanta:");
+        sb.append(',');
+        sb.append(med);
+        sb.append('\n');
+
+
+
+    }
+
+
+
 
     public static void TwoCurrency()
     {
