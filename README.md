@@ -2,5 +2,5 @@
 Członkowie zespołu i ich role:
 Operation- Kamila
 Tester- Dominika
-Developer-
+Developer-Mateusz
 Developer and scrum master Marta
