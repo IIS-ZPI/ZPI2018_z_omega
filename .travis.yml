@@ -5,3 +5,4 @@ mvn install -DskipTests=true -Dmaven.javadoc.skip=true -B -V
 install: true
 script: mvn clean install
 mvn test -B
+
