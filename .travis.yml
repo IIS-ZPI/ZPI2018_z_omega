@@ -1,10 +1,2 @@
 language: java
 jdk: oraclejdk8
-
-before_deploy:
-  - git config --local user.name kamilasyp
-  - git config --local user.email kamilasyp@gmail.com
-  - git tag "$(date +'%Y%m%d%H%M%S')-$(git log --format=%h -1)"
-  - git remote add origin2 https://${TOKEN}@github.com/IIS-ZPI/ZPI2018_z_omega.git
-  - git push origin2 --tags
-  - git fetch origin2
