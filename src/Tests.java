@@ -11,9 +11,9 @@ public class Tests {
 
     @org.junit.Test
     public void testDownloadforWeek() {
+    	// test jednostkowy + wydajnioœciowy dla tygodnia
 
-        String result = "{\"table\":\"A\",\"currency\":\"dolar amerykañski\",\"code\":\"USD\",\"rates\":[{\"no\":\"009/A/NBP/2019\",\"effectiveDate\":\"2019-01-14\",\"mid\":3.7458},{\"no\":\"010/A/NBP/2019\",\"effectiveDate\":\"2019-01-15\",\"mid\":3.7542},{\"no\":\"011/A/NBP/2019\",\"effectiveDate\":\"2019-01-16\",\"mid\":3.7619},{\"no\":\"012/A/NBP/2019\",\"effectiveDate\":\"2019-01-17\",\"mid\":3.7615},{\"no\":\"013/A/NBP/2019\",\"effectiveDate\":\"2019-01-18\",\"mid\":3.7694}]}\n";
-        ReturnItem a = new ReturnItem();
+    	ReturnItem a = new ReturnItem();
         ReturnItem b = new ReturnItem();
         b.len = 5;
         b.cur = new BigDecimal[b.len];
@@ -42,9 +42,53 @@ public class Tests {
         {
             Assert.assertEquals(a.cur[i], b.cur[i]);
         }
-  
+    }
+      
+        @org.junit.Test
+        public void testDownloadforDay() {
+        	//test jednostkowy + wydajnoœciowy dla dnia
 
+            ReturnItem a1 = new ReturnItem();
+            ReturnItem b1 = new ReturnItem();
+            b1.len = 1;
+            b1.cur = new BigDecimal[b1.len];
+            b1.cur[0] = new BigDecimal(4.2952).setScale(4, RoundingMode.HALF_DOWN);
+           
+            Main test1 = new Main();
+
+            test1.type_currency = "EUR";
+            test1.days = 1;
+            long startTimeDay = System.currentTimeMillis() ;
+
+        	
+            a1 = test1.downloadData();
+        	long endTimeDay = System.currentTimeMillis() - startTimeDay ;
+
+            Assert.assertTrue(endTimeDay <=600);  // 600 milisekund = 0.6 sekundy 
+
+            Assert.assertEquals(a1.len, b1.len);
+            Assert.assertEquals(a1.cur[0], b1.cur[0]);
+
+        }
+        @org.junit.Test
+        public void testPerormanceforYear() {
+        	// test wydajnoœciowy dla roku
+        	ReturnItem a1 = new ReturnItem();
+           
+            Main test2 = new Main();
+
+            test2.type_currency = "EUR";
+            test2.days = 365;
+            long startTimeDay = System.currentTimeMillis() ;
+
+            a1 = test2.downloadData();
+        	long endTimeDay = System.currentTimeMillis() - startTimeDay ;
+
+            Assert.assertTrue(endTimeDay <=600);  // 600 milisekund = 0.6 sekundy 
+
+         
+        }
+        
     }
     
-}
    
