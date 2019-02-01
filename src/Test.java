@@ -15,14 +15,13 @@ public class Test {
         String result = "{\"table\":\"A\",\"currency\":\"dolar amerykański\",\"code\":\"USD\",\"rates\":[{\"no\":\"009/A/NBP/2019\",\"effectiveDate\":\"2019-01-14\",\"mid\":3.7458},{\"no\":\"010/A/NBP/2019\",\"effectiveDate\":\"2019-01-15\",\"mid\":3.7542},{\"no\":\"011/A/NBP/2019\",\"effectiveDate\":\"2019-01-16\",\"mid\":3.7619},{\"no\":\"012/A/NBP/2019\",\"effectiveDate\":\"2019-01-17\",\"mid\":3.7615},{\"no\":\"013/A/NBP/2019\",\"effectiveDate\":\"2019-01-18\",\"mid\":3.7694}]}\n";
         ReturnItem a = new ReturnItem();
         ReturnItem b = new ReturnItem();
-        b.len = 6;
+        b.len = 5;
         b.cur = new BigDecimal[b.len];
-        b.cur[0] = new BigDecimal(3.7727).setScale(4, RoundingMode.HALF_DOWN);
-        b.cur[1] = new BigDecimal(3.7747).setScale(4, RoundingMode.HALF_DOWN);
-        b.cur[2] = new BigDecimal(3.7844).setScale(4, RoundingMode.HALF_DOWN);
-        b.cur[3] = new BigDecimal(3.7893).setScale(4, RoundingMode.HALF_DOWN);
-        b.cur[4] = new BigDecimal(3.7592).setScale(4, RoundingMode.HALF_DOWN);
-        b.cur[5] = new BigDecimal(3.7563).setScale(4, RoundingMode.HALF_DOWN);
+        b.cur[0] = new BigDecimal(3.7271).setScale(4, RoundingMode.HALF_DOWN);
+        b.cur[1] = new BigDecimal(3.7563).setScale(4, RoundingMode.HALF_DOWN);
+        b.cur[2] = new BigDecimal(3.7577).setScale(4, RoundingMode.HALF_DOWN);
+        b.cur[3] = new BigDecimal(3.7592).setScale(4, RoundingMode.HALF_DOWN);
+        b.cur[4] = new BigDecimal(3.7893).setScale(4, RoundingMode.HALF_DOWN);
 
         Main test = new Main();
 
@@ -38,6 +37,11 @@ public class Test {
         {
             Assert.assertEquals(a.cur[i], b.cur[i]);
         }
+
+        BigDecimal mediana = new BigDecimal(3.7577).setScale(4, RoundingMode.HALF_DOWN);;
+        BigDecimal mediana_org = test.med;
+
+        Assert.assertEquals(mediana, mediana_org);
     }
 
 }

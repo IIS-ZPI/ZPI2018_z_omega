@@ -1,14 +1,14 @@
 import com.google.gson.Gson;
 
 import java.io.*;
-
+import java.lang.reflect.Array;
 import java.math.BigDecimal;
 import java.net.URL;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.Scanner;
-
 
 public class Main {
 
@@ -20,10 +20,11 @@ public class Main {
     static int days;
     static Scanner read = new Scanner(System.in);
     static StringBuilder sb = new StringBuilder();
+    static BigDecimal med = new BigDecimal(0);
 
-    public static ReturnItem downloadData() {
+    public static ReturnItem downloadData()
+    {
         LocalDate date1 = LocalDate.now().minusDays(days);
-        System.out.println(date1);
         LocalDate date2 = LocalDate.now();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         start_date = date1.format(formatter);
@@ -46,10 +47,13 @@ public class Main {
                     len++;
                 }
 
-                for (i = 0; i < len; i++) {
+                for (i = 0 ; i < len ; i++)
+                {
                     rates[i] = cur.rates.get(i);
                     rate[i] = rates[i].mid;
                 }
+
+                //System.out.println(str);
             }
         } catch (Exception ex) {
             System.out.println("Blad podczas pobierania danych!");
@@ -59,6 +63,8 @@ public class Main {
         ReturnItem item = new ReturnItem();
         item.cur = rate;
         item.len = len;
+
+        med = Mediana(rate, len);
 
         return item;
     }
@@ -192,54 +198,28 @@ public class Main {
         int licznik = 0;
 
         for (int i = 0; i < len - 1; i++) {
+            licznik = 0;
             for (int k = 0; k < len - 1; k++) {
-                licznik = 0;
                 if (medCur[i] == medCur[k]) {
                     licznik++;
+                    if (licznik > maks) {
+                        dominanta = medCur[i];
+                        maks = licznik;
+                    }
                 }
-            }
-            if (licznik > maks) {
-                maks = licznik;
-                dominanta = medCur[i];
+
             }
         }
-
 
         System.out.println("Dominanta:" + dominanta);
         sb.append("Dominanta:");
         sb.append(',');
-        sb.append(dominanta);
-        sb.append('\n');
-
-        //srednia arytmetycczna
-        BigDecimal srednia = new BigDecimal(0);
-        for (int i = 0; i < len - 1; i++) {
-            srednia = srednia.add(medCur[i]);
-        }
-        srednia = srednia.divide(new BigDecimal(len - 1));
-        System.out.println("średnia:" + srednia);
-
-        //wariancja
-        BigDecimal wariancja = new BigDecimal(0);
-        for (int i = 0; i < len - 1; i++) {
-            wariancja = wariancja.add((medCur[i].subtract(srednia)).multiply(medCur[i].subtract(srednia)).divide(new BigDecimal(len - 1)));
-
-        }
-        System.out.println("wariancja:" + wariancja);
-
-        //odchylenie
-        double odchylenie = 0.0;
-        odchylenie = wariancja.doubleValue();
-        odchylenie = Math.sqrt(odchylenie);
-        System.out.println("odchylenie standardowe:" + odchylenie);
-        sb.append("Odchylenie standardowe:");
-        sb.append(',');
-        sb.append(odchylenie);
+        sb.append(med);
         sb.append('\n');
     }
 
-
-    public static void TwoCurrency() {
+    public static void TwoCurrency()
+    {
         int choose = 0;
         int i = 0;
         String currency1 = new String();
@@ -260,8 +240,10 @@ public class Main {
         ReturnItem item1 = new ReturnItem();
         ReturnItem item2 = new ReturnItem();
 
-        switch (choose) {
-            case 1: {
+        switch(choose)
+        {
+            case 1:
+            {
                 days = 30;
 
                 type_currency = currency1;
@@ -272,7 +254,8 @@ public class Main {
 
                 break;
             }
-            case 2: {
+            case 2:
+            {
                 days = 90;
 
                 type_currency = currency1;
@@ -283,7 +266,8 @@ public class Main {
 
                 break;
             }
-            default: {
+            default:
+            {
                 System.out.println("Zly wybor!");
                 System.exit(0);
             }
@@ -301,11 +285,12 @@ public class Main {
         sb.append(currency1);
         sb.append('\n');
 
-        for (i = 0; i < len1 - 1; i++) {
-            System.out.println(i + 1 + ". " + cur1[i].subtract(cur1[i + 1]));
-            sb.append(i + 1);
+        for (i = 0 ; i < len1-1 ; i++)
+        {
+            System.out.println(i+1 + ". " + cur1[i].subtract(cur1[i+1]));
+            sb.append(i+1);
             sb.append(',');
-            sb.append(cur1[i].subtract(cur1[i + 1]));
+            sb.append(cur1[i].subtract(cur1[i+1]));
             sb.append('\n');
         }
 
@@ -321,13 +306,47 @@ public class Main {
         sb.append(currency2);
         sb.append('\n');
 
-        for (i = 0; i < len2 - 1; i++) {
-            System.out.println(i + 1 + ". " + cur2[i].subtract(cur2[i + 1]));
-            sb.append(i + 1);
+        for (i = 0 ; i < len2-1 ; i++)
+        {
+            System.out.println(i+1 + ". " + cur2[i].subtract(cur2[i+1]));
+            sb.append(i+1);
             sb.append(',');
-            sb.append(cur2[i].subtract(cur2[i + 1]));
+            sb.append(cur2[i].subtract(cur2[i+1]));
             sb.append('\n');
         }
+    }
+
+    public static BigDecimal Mediana(BigDecimal[] cur, int len)
+    {
+        BigDecimal[] medCur = cur;
+        BigDecimal avg = new BigDecimal(0);
+        BigDecimal med = new BigDecimal(0);
+        BigDecimal two = new BigDecimal(2);
+        BigDecimal tmp = new BigDecimal(0);
+
+        int n = 0;
+        int m = 0;
+
+        for (n = 0; n < len - 1; n++) {
+            for (m = 0; m < len - 1; m++) {
+                if (medCur[m].compareTo(medCur[m + 1]) > 0) {
+                    tmp = medCur[m];
+                    medCur[m] = medCur[m + 1];
+                    medCur[m + 1] = tmp;
+                }
+            }
+        }
+
+        if (len % 2 == 0) {
+            avg = medCur[len / 2].add(medCur[(len / 2) - 1]);
+            med = avg.divide(two);
+        } else {
+            med = medCur[len / 2];
+        }
+
+
+
+        return med;
     }
 
     public static void main(String[] args) {
@@ -340,26 +359,35 @@ public class Main {
         System.out.println("2 - Rozklad zmian 2 walut");
         choose = read.nextInt();
 
-        switch (choose) {
-            case 1: {
+
+
+        switch(choose)
+        {
+            case 1:
+            {
                 Calculations();
                 break;
             }
-            case 2: {
+            case 2:
+            {
                 TwoCurrency();
                 break;
             }
-            default: {
+            default:
+            {
                 System.out.println("Zly wybor!");
             }
         }
 
-        try {
+        try
+        {
             PrintWriter pw = new PrintWriter(new File("result.csv"));
             pw.write(sb.toString());
             pw.close();
             System.out.println("Zapisano plik!");
-        } catch (FileNotFoundException e) {
+        }
+        catch (FileNotFoundException e)
+        {
             System.out.println("Błąd zapisu pliku!");
         }
     }
