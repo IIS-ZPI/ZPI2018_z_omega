@@ -216,7 +216,35 @@ public class Main {
         sb.append(',');
         sb.append(med);
         sb.append('\n');
+        sb.append(dominanta);
+        sb.append('\n');
+
+        //srednia arytmetycczna
+        BigDecimal srednia = new BigDecimal(0);
+        for (int i = 0; i < len - 1; i++) {
+            srednia = srednia.add(medCur[i]);
+        }
+        srednia = srednia.divide(new BigDecimal(len - 1));
+        System.out.println("œrednia:" + srednia);
+
+        //wariancja
+        BigDecimal wariancja = new BigDecimal(0);
+        for (int i = 0; i < len - 1; i++) {
+            wariancja = wariancja.add((medCur[i].subtract(srednia)).multiply(medCur[i].subtract(srednia)).divide(new BigDecimal(len - 1)));
+
+        }
+        System.out.println("wariancja:" + wariancja);
+
+        //odchylenie
+        double odchylenie = 0.0;
+        odchylenie = wariancja.doubleValue();
+        odchylenie = Math.sqrt(odchylenie);
+        System.out.println("odchylenie standardowe:" + odchylenie);
+        sb.append("Odchylenie standardowe:");
+        sb.append(',');
+        sb.append(odchylenie);
     }
+    
 
     public static void TwoCurrency()
     {
